@@ -6,7 +6,7 @@ associated with deserialization.
 import abc
 import functools
 from dataclasses import dataclass, is_dataclass
-from typing import Any, Callable, Dict, List, Optional, Type
+from typing import Any, Callable, Dict, Iterator, List, Optional, Type
 
 import jinja2
 
@@ -413,7 +413,11 @@ class InnerField(DeField):
         self.datavar = d
 
 
-defields = functools.partial(fields, DeField)
+def defields(cls: Type) -> Iterator[DeField]:
+    """
+    Iterate fields for deserialization.
+    """
+    yield from fields(DeField, cls)
 
 
 @dataclass
